@@ -1,0 +1,323 @@
+
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block title %} 
+Index
+{% endblock %}
+{% block body %}
+<style>
+    .scrollable-table {
+        max-height: 370px; /* Set the maximum height for the table */
+        overflow-y: auto; /* Add vertical scrollbar when content overflows */
+    }
+</style>
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page" style="min-height: auto;">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">                                    
+                                    <div class="page-title-right">
+                                        <span class="input-group-text bg-white border-primary text-white disable">
+                                            <i class="mdi mdi-calendar-range font-13 text-black"></i>                                        
+                                            <iframe aria-disabled="false" style="position: relative; top: 0px; padding-left: 10px; text-style:bold; " scrolling="no" border="0" frameborder="0" marginwidth="0" marginheight="0" allowtransparency="true" src="https://www.ashesh.com.np/linknepali-time.php?dwn=only&amp;font_color=c40228&amp;font_size=16&amp;font_weight=bolder&amp;bikram_sambat=0&amp;format=dmyw&amp;api=962173k280" width="165" height="22"></iframe>
+                  
+                                        </span>
+                                    </div>
+                                    <h4 class="page-title">Dashboard</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12">
+
+                                <div class="row">
+                                    <div class=" col-6 col-sm-6 col-md-4 ">
+                                        <div class="card widget-flat">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-account-multiple widget-icon"></i>
+                                                </div>
+                                                <h3 class="text-info fw-normal mt-0" title="Number of Customers">Customers</h3>
+                                                <h4 class="mt-3 mb-3">{{total_customers}}</h4>
+                                                
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+
+                                    <!-- <div class=" col-6 col-sm-6 col-md-4 ">
+                                        <div class="card widget-flat">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-cart-plus widget-icon"></i>
+                                                </div>
+                                                <h3 class="text-primary fw-normal mt-0" title="Number of Orders">Suppliers</h3>
+                                                <h4 class="mt-3 mb-3">{{supplier}}</h4>
+                                                 -->
+                                            <!-- </div> end card-body -->
+                                        <!-- </div> end card -->
+                                    <!-- </div> end col -->
+
+                                    <div class=" col-6 col-sm-6 col-md-4 ">
+                                        <div class="card widget-flat">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-currency-usd widget-icon"></i>
+                                                </div>
+                                                <h3 class="text-danger fw-normal mt-0 " title="Growth"><b>Total Credit</b></h3>
+                                                <h4 class="mt-3 mb-3">Rs.{{total_sales|nepalicurrencyFormat|remove_decimal}}</h4>
+                                               
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+
+                                    <div class=" col-6 col-sm-6 col-md-4 ">
+                                        <div class="card widget-flat">
+                                            <div class="card-body">
+                                                <div class="float-end">
+                                                    <i class="mdi mdi-pulse widget-icon"></i>
+                                                </div>
+                                                <h3 class="text-success fw-normal mt-0 " title="Growth"><b>Total Sales</b></h3>
+                                                <h4 class="mt-3 mb-3">Rs.{{total_amount|nepalicurrencyFormat|remove_decimal}}</h4>
+                                                
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class=" col-6 col-sm-6 col-md-4 ">
+                                        <div class="card widget-flat">
+                                            <div class="card-body">
+                                                <h3 class="text-warning fw-normal mt-0 " title="Growth"><b>Expenses</b></h3>
+                                                <h4 class="mt-3 mb-3">Rs.{{total_expenses|nepalicurrencyFormat|remove_decimal}}</h4>
+                                                
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                    <div class=" col-6 col-sm-6 col-md-4 ">
+                                        <div class="card widget-flat">
+                                            <div class="card-body">
+                                                <h3 class=" fw-normal mt-0 " title="Growth"><b>Purchase</b></h3>
+                                                <h4 class="mt-3 mb-3">Rs.{{total_purchase|nepalicurrencyFormat|remove_decimal}}</h4>
+                                                
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div> <!-- end col-->
+                                
+
+                                </div> <!-- end row -->
+
+
+                            </div> <!-- end col -->
+
+                            <div class="col-xl-12 col-lg-12">
+                                <div class="row">
+                                    <div class="col-12 col-sm-12 col-md-8">
+                                <!-- Using the format_nepali_datetime filter -->
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="table-responsive scrollable-table  ">
+                                               
+    
+                                                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#info-alert-modal"><i class="mdi mdi-plus"></i> Add New Toll</button>
+                                                <br>
+                                                <br>
+    
+                                                <!-- add new toll Modal -->
+                                                <div id="info-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-sm">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body p-4">
+                                                                <div class="text-start">
+                                                                    <form method="post" action ="{% url 'app:tolls' %}" enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+                                                                        <input type="hidden" name="form_type" value="">
+                                                                        <input type="hidden" name="deleteToll" value="">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="mb-3 ">
+                                                                                    <label for="billing-first-name" class="form-label text-center">Add Toll </label>
+                                                                                    <input name='tollName' class="form-control" type="text" placeholder="Enter Toll Name"  />
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                        </div> <!-- end row -->
+                                                                       
+                                                                        
+                                                                          
+                                                                        </div> <!-- end row -->
+                
+                                                                        <div class="row justify-content-center">
+                                                                            <div class="col-sm-6">
+                                                                                <input class="btn btn-danger" type="submit" name="submit" value="Add Toll">
+                                                                                
+                                                                            </div> <!-- end col -->
+                                                                           
+                                                                        </div> <!-- end row -->
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                </div>
+                                                <!-- end modal -->
+    
+                                                <!-- edite toll -->
+                                                {% for item in toll %}
+                                                <div id="editeToll-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                    <div class="modal-dialog modal-sm">
+                                                        <div class="modal-content">
+                                                            <div class="modal-body p-4">
+                                                                <div class="text-start">
+                                                                    <form method="post" action ="{% url 'app:edite_toll' item.toll_slug %}" enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <div class="mb-3 ">
+                                                                                    <label for="billing-first-name" class="form-label text-center">Toll Name </label>
+                                                                                    <input name='tollName' class="form-control" type="text" placeholder="Enter Toll Name"  value="{{item.toll_name}}" />
+                                                                                </div>
+                                                                            </div>
+                                                                            
+                                                                        </div> <!-- end row -->
+                                                                       
+                                                                        
+                                                                          
+                                                                        </div> <!-- end row -->
+                
+                                                                        <div class="row justify-content-center">
+                                                                            <div class="col-sm-6">
+                                                                                <input class="btn btn-danger" type="submit" name="submit" value="Update Toll">
+                                                                                
+                                                                            </div> <!-- end col -->
+                                                                           
+                                                                        </div> <!-- end row -->
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div><!-- /.modal-content -->
+                                                    </div><!-- /.modal-dialog -->
+                                                
+                                                {% endfor %}
+                                                <!-- endtoll -->
+
+                                                <!-- delete toll modal -->
+                                                {% for item in toll %}
+                                                <div id="deleteToll-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-sm">
+                                                        <form method ="post" action="{% url 'app:tolls' %}">
+                                                            {% csrf_token %}
+                                                        <div class="modal-content">
+                                                            <input type="hidden" name="deleteToll" value="deleteToll">
+                                                            <input type="hidden" value="{{item.id}}" name="id">
+                                                            <div class="modal-header bg-danger">
+                                                                <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Toll</h4>
+                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                Are your Sure ?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                            </div>
+                                
+                                                        </div><!-- /.modal-content -->
+                                                        </form>
+                                                    </div><!-- /.modal-dialog -->
+                                                </div>
+                                                {% endfor %}
+    
+                                                <div class="table-responsive scrollable-table  ">
+                                                    {% if messages %}
+                                                    {% for msg in messages %}
+                                                        <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                            <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                                        </div>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                <table class="table table-centered table-nowrap mb-0  ">
+                                                    <thead class="table-light " style="position: sticky; top: 0; background-color: #fff; z-index: 1;">
+                                                        <tr>
+                                                            <th>S.N</th>
+                                                            <th>Toll</th>
+                                                            <th>Customer</th>
+                                                            <th>Cash</th>
+                                                            <th>Credit</th>
+                                                            {% if request.user.is_superuser%}
+                                                            <th>Action<th>
+                                                            {% endif %}
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="scrollable-table" >
+                                                        {% for item in toll %}
+                                                        <tr>
+                                                            <td>{{forloop.counter}}</td>
+                                                            
+                                                            <td>
+                                                                <a href="{% url 'app:toll_details'  item.toll_slug %}" style="font-size: large;
+                                                                font-weight: 900;">
+                                                                {{item.toll_name}}
+                                                                </a>
+                                                            </td>
+                                                            <td>{{item.toll_slug|customercount}}</td>
+                                                            <td>
+                                                             Rs.{{item.get_total_paid_amount|nepalicurrencyFormat|remove_decimal}}
+                                                            </td>
+                                                            <td>Rs.{{item.get_total_remaining_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                            
+                                                            {% if perms.app.delete_toll %}  
+                                                            <td>
+                                                            <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editeToll-{{item.id}}"><i class="mdi mdi-pen"></i></button>
+                                                            <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteToll-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+                                                            <td>
+                                                            {% endif %}
+    
+                                                        </tr>
+                                                        {% endfor %}
+                                                        
+                                                        
+                                                        
+                                                    </tbody>
+                                                    
+                                                </table>
+                                                </div>
+                                            </div>
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end card-->
+                                 <!-- end col -->
+                                    
+                                
+
+                                <div class="col-12 col-sm-12 col-md-4">
+
+                                    <div class="card ">
+                                        <div class="card-body p-2">
+                                            <img src="{% static 'app/assets/images/vishwakarma-puja.jpg' %}" class="img-fluid">
+                                            
+                                            </span>
+                                        </div> <!-- end card-body-->
+                                    </div> <!-- end card-->
+                                </div>
+
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                        
+
+                    </div>
+                    <!-- container -->
+
+                </div>
+                <!-- content -->
+
+            {%endblock%}

@@ -1,0 +1,114 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}
+Purchase item
+{% endblock %}
+{% block body %}
+ <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                            <li class="breadcrumb-item active">Purchase Details</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Purchase Details</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <br>
+                        <br>
+                        
+                        
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4 class="header-title mb-3"> Purchase Items - {{purchaseID.party}} </h4>
+            
+                                        <div class="table-responsive">
+                                            <table class="table mb-0">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>S.N</th>
+                                                    <th>Item</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
+                                                    <th>Date</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for purchase_item in purchaseItems %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td class="text-success">{{purchase_item.product}}</td>
+                                                        <td>{{purchase_item.quantity}} {{purchase_item.unit}}</td>
+                                                        <td>Rs.{{purchase_item.amount_per_unit}}</td>
+                                                        
+                                                        <td>{{purchase_item.nepali_create_date}}</td>
+                                                        <td>
+                                                            
+                                                        <b class="text-primary">Rs.{{purchase_item.get_cost}}</b></td>
+                                                    </tr>
+                                                    {% endfor %}    
+                                               
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- end table-responsive -->
+            
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+        
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+            
+                                        <div class="table-responsive">
+                                            <div class="border pt-2 mt-4 mt-lg-0 rounded">
+                                                <h4 class="header-title mb-3 ps-2">Transection Summary</h4>
+    
+                                                <div class="">
+                                                    <table class="table mb-0">
+                                                        <tbody>
+                                                            <hr>
+                                                           
+                                                            <tr>
+                                                                <td class="text-primary"><b>Total Amount :</b></td>
+                                                                <td class="text-danger"><b>Rs.{{total_purchase}}</b></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- end table-responsive -->
+                                            </div> 
+                                        </div>
+                                        <!-- end table-responsive -->
+            
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+{% endblock%}

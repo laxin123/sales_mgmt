@@ -1,0 +1,304 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} 
+Inventory Products
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            <style>
+                #id_product_name{
+                    display: block;
+                    width: 100%;
+                    padding: 0.45rem 0.9rem;
+                    font-size: .9rem;
+                    font-weight: 400;
+                    line-height: 1.5;
+                    color: var(--ct-body-color);
+                    background-color: var(--ct-input-bg);
+                    background-clip: padding-box;
+                    border: var(--ct-border-width) solid var(--ct-border-color);
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                    border-radius: 0.25rem;
+                }
+            </style>
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                                            <li class="breadcrumb-item active">Inventory Products</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Inventory Products</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-sm-5">
+                                                <button class="btn btn-success mt-2 mt-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="mdi mdi-plus-circle me-2"></i>Add Products</button>
+ 
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <div class="text-sm-end">
+                                                    <button type="button" class="btn btn-success mb-2 me-1"><i class="mdi mdi-cog-outline"></i></button>
+                                                    <button type="button" class="btn btn-light mb-2 me-1">Import</button>
+                                                    <button type="button" class="btn btn-light mb-2">Export</button>
+                                                </div>
+                                            </div><!-- end col-->
+                                        </div>
+                                        {% if messages %}
+                                            {% for msg in messages %}
+                                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="all" >
+                                                            S.N
+                                                        </th>
+                                                        <th class="all">Product</th>
+                                                        {% comment %} <th>Image</th> {% endcomment %}
+                                                        <th>Rate retail</th>
+                                                        <th>Rate wholesale</th>
+                                                        <th>Rate manu</th>
+                                                        <th style="width: 85px;">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for product in products %}
+                                                    <tr>
+                                                        <td>
+                                                            <p>{{forloop.counter}}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="m-0 d-inline-block align-middle font-16">
+                                                                <a href="apps-ecommerce-products-details.html" class="text-body">{{product.product_name}}</a>
+                                                                
+                                                            </p>
+                                                        </td>
+                    
+                                                        {% comment %} <td>
+                                                            <img src="{% if product.related_product.image %}{{product.related_product.image.url}}{% endif %}" alt="contact-img" title="contact-img" class="rounded me-3" height="48" />
+                                                        </td> {% endcomment %}
+                                                        <td>
+                                                            <p>{{product.rate_retail}}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p>{{product.rate_wholesale}}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p>{{product.rate_manu}}</p>
+                                                        </td>
+                    
+                                                        <td class="table-action">
+                                      
+                                                            <a href="{% url 'app:edite' product.id %}"><i class="mdi mdi-square-edit-outline"></i></a>
+
+                                                            <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#danger-header-modal-{{product.id}}"><i class="mdi mdi-delete"></i></button>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->        
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+
+                <!-- add product -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 400px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Add Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Add New Inventory Product</h4>
+                                                    <br>
+                                                    <form method="post" action ="{% url 'app:inventoryproduct' %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Product Name</label>
+                                                                    <br>
+                                                                    {{form.product_name}}
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Rate retail</label>
+                                                                    <input name='{{ form.rate_retail.name }}' class="form-control" type="text" placeholder="Enter Retail Rate" id="billing-first-name" 
+                                                                    value="" />
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Rate Wholesale</label>
+                                                                    <input name='{{ form.rate_wholesale.name }}' class="form-control" type="text" placeholder="Enter Wholesale Rate" id="billing-first-name" 
+                                                                    value="" required/>
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Rate Manu</label>
+                                                                    <input name='{{ form.rate_manu.name }}' class="form-control" type="text" placeholder="Enter Rate Menu" id="billing-first-name" 
+                                                                    value="" />
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                        
+                                                           
+                                                     
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row ">
+                                                            <div class="col-sm-6">
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Add Product">
+                                                                
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                
+                </div>
+
+                
+
+
+               {% for product in products %}
+                <div id="danger-header-modal-{{product.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form method ="post" action="{% url 'app:delete_inventory' %}">
+                            {% csrf_token %}
+                        <div class="modal-content">
+                            <input type="hidden" value="{{product.id}}" name="id">
+                            <div class="modal-header bg-danger">
+                                <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Product</h4>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are your Sure ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                            </div>
+
+                        </div><!-- /.modal-content -->
+                        </form>
+                    </div><!-- /.modal-dialog -->
+                </div>
+                {% endfor %} 
+
+            
+                <style>
+                    #imageContainer {
+                        width: 100%;
+                        height: 100%;
+                        max-height:350px;
+                        border: 1px solid #ccc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    #imagePreview {
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+                </style>
+                <script>
+                    function showPreview(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                document.getElementById('imagePreview').src = e.target.result;
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+                </script>
+       {%endblock%}

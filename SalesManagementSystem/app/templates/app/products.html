@@ -1,0 +1,454 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} 
+Products
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                            <li class="breadcrumb-item active">Products</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Products</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-sm-5 ">
+                                                <button class="btn btn-success mt-2 mt-md-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="mdi mdi-plus-circle me-2"></i>Add Products</button>
+ 
+                                            </div>
+                                            
+                                        </div>
+                                        {% if messages %}
+                                            {% for msg in messages %}
+                                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                
+                                        <div class="table-responsive">
+                                            <table class="table table-centered w-100 dt-responsive nowrap" id="products-datatable">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th class="all" >
+                                                            S.N
+                                                        </th>
+                                                        <th class="all">Product</th>
+                                                        <th>Image</th>
+                                                        <th style="width: 85px;">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for product in products %}
+                                                    <tr>
+                                                        <td>
+                                                            <p>{{forloop.counter}}</p>
+                                                        </td>
+                                                        <td>
+                                                            <p class="m-0 d-inline-block align-middle font-16">
+                                                                <a href="#" class="text-body">{{product.product_name}}</a>
+                                                                
+                                                            </p>
+                                                        </td>
+                    
+                                                        <td>
+                                                            <img src="{% if product.image %}{{product.image.url}} {% else %} {% static 'app/assets/unknow.png' %} {% endif%}" alt="product-img" title="contact-img" class="rounded me-3" height="48" />
+                                                        </td>
+                    
+                                                        <td class="table-action">
+                                      
+                                                            <div type="button" data-bs-toggle="offcanvas" data-bs-target="#editeproduct-{{product.id}}" aria-controls="offcanvasRight" class="action-icon"> <i class="mdi mdi-square-edit-outline"></i></div>
+
+
+                                                            
+                                                            <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#danger-header-modal-{{product.id}}"><i class="mdi mdi-delete"></i></button>
+
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+
+                            <div class="col-4 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive scrollable-table  ">
+                                            
+
+                                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#info-alert-modal"><i class="mdi mdi-plus"></i> Add Product Unit</button>
+                                            <br>
+                                            <br>
+
+                                            <!-- add new toll Modal -->
+                                            <div id="info-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body p-4">
+                                                            <div class="text-start">
+                                                                <form method="post" action ="{% url 'app:productUnit' %}" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="mb-3">
+                                                                                <label for="billing-first-name" class="form-label text-center">Add Product Unit </label>
+                                                                                <input name='{{productUnitForm.unit_name.name}}' class="form-control" type="text" placeholder="Enter Product Unit "  />
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div> <!-- end row -->
+                                                                   
+                                                                    
+                                                                      
+                                                                    </div> <!-- end row -->
+            
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-sm-6">
+                                                                            <input class="btn btn-danger" type="submit" name="submit" value="Add Unit">
+                                                                            
+                                                                        </div> <!-- end col -->
+                                                                       
+                                                                    </div> <!-- end row -->
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div>
+                                            <!-- end modal -->
+
+                                            <!-- delete toll modal -->
+                                           
+
+
+                                            <table class="table table-centered table-nowrap mb-0  ">
+                                                <thead class="table-light sticky-top">
+                                                    <tr>
+                                                        <th>S.N</th>
+                                                        <th>Unit Name</th>
+                                                        <th>Action<th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="scrollable-table" >
+                                                    {% for item in productUnits %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        
+                                                        <td>
+                                                            <a href="#">
+                                                            {{item.unit_name}}
+                                                            </a>
+                                                        </td>
+
+                                                        <td>
+                                                        <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteProductUnit-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+                                                        <td>
+
+                                                    </tr>
+
+                                                    <div id="deleteProductUnit-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-sm">
+                                                            <form method ="post" action="{% url 'app:delete_unit' %}">
+                                                                {% csrf_token %}
+                                                            <div class="modal-content">
+                                                                <input type="hidden" value="{{item.id}}" name="product_unit_id">
+                                                                <div class="modal-header bg-danger">
+                                                                    <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Product Unit</h4>
+                                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Are your sure for deleting  product unit - <span class="text-warning">{{item.unit_name}}</span>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                                                </div>
+                                    
+                                                            </div><!-- /.modal-content -->
+                                                            </form>
+                                                        </div><!-- /.modal-dialog -->
+                                                    </div>
+
+                                                    {% endfor %}
+                                                    
+                                                    
+                                                    
+                                                </tbody>
+                                                
+                                            </table>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+
+                        </div>
+                        <!-- end row -->        
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+
+                <!-- add product -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 400px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Add Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Add Product Information</h4>
+                                                    <br>
+                                                    <form method="post" action ="{% url 'app:products' %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Product Name</label>
+                                                                    <input name='{{ form.product_name.name }}' class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" 
+                                                                    value="" required/>
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                        
+                                                           
+                                                     <!-- end row -->
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-address" class="form-label">Image</label>
+                                                                    <input type="file" name="{{ form.image.name }}" class="form-control custom-class"  onchange="showPreview(this);" >
+
+                                                                    <div id="imageContainer">
+                                                                        <img id="imagePreview" src="" alt="">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div> <!-- end row -->
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row mt-4">
+                                                            <div class="col-sm-6">
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Add Product">
+                                                                
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                
+                </div>
+
+                <!-- edite -->
+                {% for product in products %}
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="editeproduct-{{product.id}}" aria-labelledby="offcanvasRightLabel" style="width: 400px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Edit Product</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Edit Product Information</h4>
+                                                    <br>
+                                                    <form method="post" action ="{% url 'app:edit_product' product.id %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Product Name</label>
+                                                                    <input name='{{ form.product_name.name }}' class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" 
+                                                                    value="{{product.product_name}}" required/>
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                        
+                                                           
+                                                     <!-- end row -->
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-address" class="form-label">Image</label>
+                                                                    <input type="file" name="{{ form.image.name }}" class="form-control custom-class"  onchange="showPreview(this);" >
+
+                                                                    <div id="imageContainer">
+                                                                        <img id="imagePreview" src="{% if product.image %}{{product.image.url}}{% endif %}" alt="">
+                                                                    </div>
+                                                                </div>
+
+                                                               
+                                                            </div>
+                                                            
+                                                        </div> <!-- end row -->
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row mt-4">
+                                                            <div class="col-sm-6">
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Update Product">
+                                                                
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+                {% endfor %}
+
+
+               {% for product in products %}
+                <div id="danger-header-modal-{{product.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form method ="post" action="{% url 'app:productdelete' %}">
+                            {% csrf_token %}
+                        <div class="modal-content">
+                            <input type="hidden" value="{{product.id}}" name="id">
+                            <div class="modal-header bg-danger">
+                                <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Product</h4>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are your Sure ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                            </div>
+
+                        </div><!-- /.modal-content -->
+                        </form>
+                    </div><!-- /.modal-dialog -->
+                </div>
+                {% endfor %}
+
+            
+                <style>
+                    #imageContainer {
+                        width: 100%;
+                        height: 100%;
+                        max-height:350px;
+                        border: 1px solid #ccc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    #imagePreview {
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+                </style>
+                <script>
+                    function showPreview(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                document.getElementById('imagePreview').src = e.target.result;
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+                </script>
+       {%endblock%}

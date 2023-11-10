@@ -1,0 +1,716 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load humanize %}
+{% load custome_filter %}
+{% block title %} 
+Customer and Supplier
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            <style>
+                .scrollable-table {
+                    scrollbar-width: thin;
+                    max-height: 400px; /* Set the maximum height for the table */
+                    overflow-y: auto; /* Add vertical scrollbar when content overflows */
+                    
+                }
+                .suggestion-list {
+                    position: absolute;
+                    z-index: 1000; /* Adjust the z-index as needed */
+                    max-height: 200px;
+                    overflow-y: auto;
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                    border-top: none; /* Hide top border to overlap with the input field */
+                    display: none; /* Initially hidden */
+                    width: 69%; /* Match the width of the input field */
+                }
+                #inputPassword2 {
+                    position: relative; /* Ensure relative positioning to allow absolute positioning of the suggestion list */
+                }
+
+                #purchaselserach {
+                    position: relative; /* Ensure relative positioning to allow absolute positioning of the suggestion list */
+                }
+            </style>
+            
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System </a></li>
+                                            <li class="breadcrumb-item active">Sales</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Sales</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- transaction -->
+                                <div class="card">
+                                    <div class="card-body" >
+                                        
+                                        <div class="" >
+                                            <h4>Transection Summary</h4>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col col-md-3">
+                                                <span class="text-success">Credit</span><br>
+                                                ₹ {{totalSales|nepalicurrencyFormat|remove_decimal}}
+                                            </div>
+                                            <div class="col col-md-3">
+                                                <span class="text-primary">Purchase</span><br>
+                                                ₹{{total_purchase|nepalicurrencyFormat|remove_decimal}}
+                                            </div>
+                                            <div class="col col-md-3">
+                                                <span class="text-danger">Expenses</span><br>
+                                                ₹ {{total_expense|nepalicurrencyFormat|remove_decimal}}
+                                            </div>
+                                            <div class="col col-md-3">
+                                                <div class="btn btn-outline-warning">
+                                                   <a href="{% url 'app:sales_dashboard' %}" class="text-black text-bold text-capitalize" style="font-weight:bold;"> View Report</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- transaction -->
+
+                                <div class="card">
+                                        <div class="card-body">
+                                            <!--menu -->
+                                            <ul class="nav nav-tabs nav-bordered mb-3">
+                                                <li class="nav-item">
+                                                    <a href="#sales" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                                                        <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                                        <span class="d-none d-md-block">Sales</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="#purchase" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
+                                                        <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                                        <span class="d-none d-md-block">Purchase</span>
+                                                    </a>
+                                                </li>
+    
+                                                <li class="nav-item">
+                                                    <a href="#expenses" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                                        <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                                        <span class="d-none d-md-block">Expenses</span>
+                                                    </a>
+                                                </li>
+    
+                                            </ul>
+                                            
+                                            <div class="tab-content">
+                                                <div class="tab-pane active " id="sales">
+                                                    <div class="row mb-2 justify-content-between">
+                                                        <div class="col-md-9">
+                                                            <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                                <div class="col-12">
+                                                                    <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                                    <input type="search" class="form-control" id="inputPassword2" placeholder="Search..." onkeyup="filterCustomerNames()" onblur="hideCustomerList()">
+                                                                    <ul id="customerNameList" class="suggestion-list">
+                                                                        {% for item in sales_items %}
+                                                                            <li style="list-style-type:none; padding: 5px;"><a href="{% url 'app:salesList' item.customer.id %}">{{ item.customer.name }}</a></li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </div>
+                                                            </form>    
+
+                                                        </div>
+                                                        
+                                                        <div class="col-md-3">
+                                                            <div class="float-end ">
+                                                                <a class="btn btn-danger" href="{% url 'app:addsales' %}">
+                                                                    <i class="mdi mdi-plus"></i> Add Sales 
+                                                                </a>
+        
+                                                                <!--add-->
+                                                            </div>
+                                                        </div><!-- end col-->
+                                                
+                                                    </div>
+
+                                                    <div class="table-responsive scrollable-table ">
+                                                        <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                            <thead class="table-light  " style="position: sticky; top: 0; background-color: #fff; z-index: 1;"> <!--sticky-top-->
+                                                                <tr>
+                                                                    <th>CUSTOMER NAME</th>
+                                                                    <th>DATE</th>
+                                                                    <th>AMOUNT</th>
+                                                                    {% if request.user.is_superuser %}
+                                                                    <th style="width: 50px;">ACTION</th>
+                                                                    {% endif %}
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for item in sales_items%}
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="{% url 'app:salesList' item.customer.id %}">
+                                                                        
+                                                                        <p class="m-0 d-inline-block align-middle font-16">
+                                                                            <b
+                                                                                class=" text-primary" style="font-size: large;
+                                                                                font-weight: 900;">{{item.customer.name}}</b>
+                                                                            <br>
+                                                                            <small class="me-2 text-body"><b>Address:</b> {{item.customer.address}} </small>
+                                                                            <small class="text-body"><b>Toll:</b> {{item.customer.toll}}
+                                                                            </small>
+                                                                        </p>
+                                                                    </a>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {{item.nepali_create_date}}
+                                                                    </td>
+
+                                                                    <td>
+                                                                        {% if item.payment_status == "partially_paid"%}
+                                                                            {{item.paid_amount}}<br>
+                                                                            {% comment %} <small><span class="badge bg-warning">{{item.payment_status}}</span></small> {% endcomment %}
+                                                                        {%else %}
+                                                                        {{item.total_amount|nepalicurrencyFormat|remove_decimal }}
+                                                                        <br>
+                                                                        <small class="me-2">
+                                                                            {% if item.payment_status == "paid" %}
+                                                                            <span class="badge bg-success">{{item.payment_status}}</span>
+                                                                            {% else %}
+                                                                            <span class="badge bg-danger">{{item.payment_status}}</span>
+                                                                            {% endif %}
+                                                                             
+                                                                        </small>
+                                                                        {% endif %}
+                                                                    </td>
+                                                                    {% if request.user.is_superuser %}
+                                                                    <td>
+                                                                        <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deletesales-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+                                                                    </td>
+                                                                    {% endif %}
+                                                                </tr>
+
+                                                                <div id="deletesales-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-sm">
+                                                                        <form method ="post" action="{% url 'app:delete_sales' %}">
+                                                                            {% csrf_token %}
+                                                                        <div class="modal-content">
+                                                                            <input type="hidden" value="{{item.id}}" name="salesId">
+                                                                            <div class="modal-header bg-danger">
+                                                                                <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Sales</h4>
+                                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                Are your Sure ?
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                                            </div>
+                                                
+                                                                        </div><!-- /.modal-content -->
+                                                                        </form>
+                                                                    </div><!-- /.modal-dialog -->
+                                                                </div>
+                                                                {% endfor %}
+
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div> <!-- end table-responsive-->
+                                                    
+                                                </div>
+                                                <div class="tab-pane show " id="purchase">
+                                                    <div class="row mb-2 justify-content-between">
+                                                        <div class="col-md-9">
+                                                            <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                                <div class="col-12">
+                                                                    <label for="purchaselserach" class="visually-hidden">Search</label>
+                                                                    <input type="search" class="form-control" id="purchaselserach" placeholder="Search..." onkeyup="filterCustomerNames()" onblur="hideCustomerList()">
+                                                                    <ul id="purchaseNamelist" class="suggestion-list" style="display: none;">
+                                                                        {% for item in purchase %}
+                                                                            <li style="list-style-type:none; padding: 5px;"><a href="{% url 'app:purchase_details' item.id %}">{{item.party}}</a></li>
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </div>
+                                                            </form>                           
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="float-end ">
+                                                                <a class="btn btn-danger" href="{% url 'app:addpurchase' %}"><i class="mdi mdi-plus"></i> Add Purchase </a>
+        
+                                                                <!--add-->
+                                                            </div>
+                                                        </div><!-- end col-->
+                                                
+                                                    </div>
+                                                    <div class="table-responsive scrollable-table ">
+                                                        <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                            <thead class="table-light" style="position: sticky; top: 0; background-color: #fff; z-index: 1;">
+                                                                <tr>
+                                                                    <th>S.N</th>
+                                                                    <th>SUPPLIER NAME</th>
+                                                                    <th>CREATE DATE</th>
+                                                                    <th>AMOUNT</th>
+                                                                    <th style="width: 50px;">ACTION</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for item in purchase %}
+                                                                <tr>
+                                                                    <td>{{forloop.counter}}</td>
+                                                                    <td>
+                                                                        
+                                                                        <p class="m-0 d-inline-block align-middle font-16">
+                                                                            <a href="{% url 'app:purchase_details' item.id %}"
+                                                                                class="text-body">{{item.party}}</a>
+                                                                            <br>
+                                                                            {% comment %} <small class="me-2"><b>Address:</b> {{item.purchaseparty.address}} </small>
+                                                                            <small><b>Toll:</b> Light Green
+                                                                            </small> {% endcomment %}
+                                                                        </p>
+                                                                    </td>
+                                                                    <td>{{item.nepali_create_date}}</td>
+                                                                    
+                                                                    <td>
+                                                                        {{item.get_total_cost}}
+                                                                    </td>
+                                                                    <td>
+                                                                        <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deletepurchase-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+
+                                                                    </td>
+                                                                </tr>
+
+
+                                                                <div id="deletepurchase-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-sm">
+                                                                        <form method ="post" action="{% url 'app:deletePurchase' %}">
+                                                                            {% csrf_token %}
+                                                                        <div class="modal-content">
+                                                                            <input type="hidden" value="{{item.id}}" name="purchaseID">
+                                                                            <div class="modal-header bg-danger">
+                                                                                <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Purchase</h4>
+                                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                Are your Sure ?
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                                            </div>
+                                                
+                                                                        </div><!-- /.modal-content -->
+                                                                        </form>
+                                                                    </div><!-- /.modal-dialog -->
+                                                                </div>
+                                                                {% endfor %}
+
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div> <!-- end table-responsive-->
+                                                </div>
+
+                                                <div class="tab-pane show " id="expenses">
+                                                    <div class="row mb-2 justify-content-between">
+                                                        <div class="col-md-8">
+                                                            <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                                <div class="col-12">
+                                                                    <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                                    <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+                                                                </div>
+                                                                 
+                                                            </form>                            
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="float-end ">
+                                                                <a class="btn btn-danger"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="mdi mdi-plus"></i> Add Expenses </a>
+        
+                                                                <!--add-->
+                                                            </div>
+                                                        </div><!-- end col-->
+                                                
+                                                    </div>
+                                                    <div class="table-responsive scrollable-table">
+                                                        <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                            <thead class="table-light sticky-top">
+                                                                <tr>
+                                                                    <th>NAME</th>
+                                                                    <th>AMOUNT</th>
+                                                                    <th>Create Date</th>
+                                                                    <th style="width: 50px;">ACTION</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for item in expenses %}
+                                                                <tr>
+                                                                    <td>
+                                                                        {{item.expenses_name}}
+                                                                    </td>
+                                                                    
+                                                                    <td>
+                                                                        Rs.{{item.amount}}
+                                                                    </td>
+                                                                    <td>{{item.create_date}}</td>
+                                                                    <td>
+                                                                        <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteexpenses-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+
+                                                                    </td>
+                                                                </tr>
+
+
+                                                                <div id="deleteexpenses-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                                    <div class="modal-dialog modal-sm">
+                                                                        <form method ="post" action="{% url 'app:expeses_delete' %}">
+                                                                            {% csrf_token %}
+                                                                        <div class="modal-content">
+                                                                            <input type="hidden" value="{{item.id}}" name="expensesID">
+                                                                            <div class="modal-header bg-danger">
+                                                                                <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Expenses</h4>
+                                                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                Are your Sure ?
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                                <button type="submit" class="btn btn-danger">Yes</button>
+                                                                            </div>
+                                                
+                                                                        </div><!-- /.modal-content -->
+                                                                        </form>
+                                                                    </div><!-- /.modal-dialog -->
+                                                                </div>
+
+                                                                {% endfor %}
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div> <!-- end table-responsive-->
+                                                </div>
+                                                
+    
+    
+    
+                                            </div>
+    
+                                        </div> <!-- end card-body-->
+                                        
+                                    
+
+                                </div> <!-- end card-->
+                                
+                            </div> <!-- end col -->
+                            
+                            
+                        </div>
+                        
+                        
+                        <!-- end row --> 
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+              
+
+                
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 300px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Create Expenses</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                   
+                                                    <form method="post" action ="{% url 'app:expenses' %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Expenses Name </label>
+                                                                    <input type="text" name="{{expenses_form.expenses_name.name}}" placeholder="expenses name" class='form-control'>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-amount" class="form-label">Total Amount<span class="text-danger">*</span></label>
+                                                                    <input name ="{{expenses_form.amount.name}}" class="form-control" type="number" placeholder="00000.00" id="billing-amount" required />
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                   
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row ">
+                                                            <div class="col-sm-6">
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Add Expenses">
+                                                                
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+
+
+                <!-- supplier-->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="supplierAdd" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Add Supplier</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Supplier Information</h4>
+
+                                                    <p class="text-muted mb-4">Fill the form below in order to
+                                                        send you the order's invoice.</p>
+
+                                                        <form method="post" action ="{% url 'app:customers' %}" enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="form_type" value="">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-first-name" class="form-label">Full Name</label>
+                                                                        <input name='fullname' class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-last-name" class="form-label">Address</label>
+                                                                        <input name ="address" class="form-control" type="text" placeholder="Enter your last name" id="billing-last-name" />
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-email-address" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                                        <input name="email" class="form-control" type="email" placeholder="Enter your email" id="billing-email-address" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                                        <input name="phoneNo" class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="billing-phone" />
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                            
+                                                               
+                                                         <!-- end row -->
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-address" class="form-label">Image</label>
+                                                                        <input type="file" name="image" class="form-control custom-class"  onchange="showPreview(this);">
+    
+                                                                        <div id="imageContainer">
+                                                                            <img id="imagePreview" src="{% if instance %}{{ instance.Image.url }}{% endif %}" alt="">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                
+                                                            </div> <!-- end row -->
+                                                            </div> <!-- end row -->
+    
+                                                            <div class="row mt-4">
+                                                                <div class="col-sm-6">
+                                                                    <input class="btn btn-danger" type="submit" name="submit" value="Add Supplier">
+                                                                    
+                                                                </div> <!-- end col -->
+                                                               
+                                                            </div> <!-- end row -->
+                                                        </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+
+                
+
+               
+
+
+
+                
+                <script>
+                    $.NotificationApp.send("Title","Your awesome message text","Position","Background color","Icon")
+
+                </script>
+
+
+                <script>
+                    function filterCustomerNames() {
+                        // Get the input value
+                        var input = document.getElementById("inputPassword2");
+                        var filter = input.value.toUpperCase();
+                
+                        var purchaselinput = document.getElementById("purchaselserach");
+                        var filter1 = purchaselinput.value.toUpperCase();
+
+                        
+                        // Get the list of customer names
+                        var customerList = document.getElementById("customerNameList");
+                        var customers = customerList.getElementsByTagName("li");
+                        
+                        var purchaselist = document.getElementById("purchaseNamelist");
+                        var purchase = purchaselist.getElementsByTagName("li");
+                
+                        // Show the list
+                        customerList.style.display = "block";
+                        purchaselist.style.display ="block";
+
+                        // Loop through all list items, and hide those that don't match the search query
+                        for (var i = 0; i < customers.length; i++) {
+                            var customer = customers[i];
+                            var name = customer.textContent || customer.innerText;
+                            if (name.toUpperCase().indexOf(filter) > -1) {
+                                customer.style.display = "";
+                            } else {
+                                customer.style.display = "none";
+                            }
+                        }
+
+                        for (var i = 0; i < purchase.length; i++) {
+                            var purcha = purchase[i];
+                            var name = purcha.textContent || purcha.innerText;
+                            if (name.toUpperCase().indexOf(filter1) > -1) {
+                                purcha.style.display = "";
+                            } else {
+                                purcha.style.display = "none";
+                            }
+                        }
+                    }
+                
+                    function hideCustomerList() {
+                        // Hide the list if there's no input
+                        var input = document.getElementById("inputPassword2");
+                        var customerList = document.getElementById("customerNameList");
+                        
+                        var purchaseinput = document.getElementById("purchaselserach");
+                        var purchaselist = document.getElementById("purchaseNamelist");
+
+
+                        if (input.value.trim() === "") {
+                            customerList.style.display = "none";
+                        }
+
+                        if (purchaseinput.value.trim() === "") {
+                            purchaselist.style.display = "none";
+                        }
+                        
+                    }
+                </script> 
+
+                
+                  
+                   <style>
+                            #imageContainer {
+                                width: 100%;
+                                height: 100%;
+                                max-height:350px;
+                                border: 1px solid #ccc;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                overflow: hidden;
+                            }
+
+                            #imagePreview {
+                                max-width: 100%;
+                                max-height: 100%;
+                            }
+                        </style>
+                        <script>
+                            function showPreview(input) {
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        document.getElementById('imagePreview').src = e.target.result;
+                                    };
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                        </script>
+                            
+       {%endblock%}

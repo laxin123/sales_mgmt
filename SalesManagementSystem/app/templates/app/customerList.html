@@ -1,0 +1,155 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block title %}
+Toll Customers 
+{% endblock %}
+{% block body %}
+<style>
+    .suggestion-list {
+        position: absolute;
+        z-index: 1000; /* Adjust the z-index as needed */
+        max-height: 200px;
+        overflow-y: auto;
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-top: none; /* Hide top border to overlap with the input field */
+        display: none; /* Initially hidden */
+        width: 30%; /* Match the width of the input field */
+    }
+    #inputPassword2 {
+        position: relative; /* Ensure relative positioning to allow absolute positioning of the suggestion list */
+    }
+</style>
+ <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Customer List</a></li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Customer List</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <br>
+                        <br>
+                        
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="row m-3 justify-content-between">
+                                        <div class="col-md-4">
+                                            <h4 class="header-title mt-2 text-danger">Toll : <span class="text-success">{{toll_name}}</span></h4>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                <div class="col-12">
+                                                    <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                    <input type="search" class="form-control" id="inputPassword2" placeholder="Search..." onkeyup="filterCustomerNames()" onblur="hideCustomerList()">
+                                                    <ul id="customerNameList" class="suggestion-list">
+                                                        {% for item in customers %}
+                                                            <li style="list-style-type:none; padding: 5px;"><a href="{% url 'app:salesList' item.id %}">{{ item.name }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </form>     
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-body">
+                                        
+                                        <div class="table-responsive">
+                                            <table class="table mb-0">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>S.N</th>
+                                                    <th>Customer Name</th>
+                                                    <th>Remaining Price</th>
+                                                    <th>Total Paid</th>
+                                                    <th>Total Amount</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for item in customers%}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td>
+                                                            <a href="{% url 'app:salesList' item.id %}" style="font-weight: 800; font-size: large;">{{item.name}}</a>
+                                                        </td>
+                                                        
+                                                        <td>Rs.{{item.get_total_remaining_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                        <td>Rs.{{item.get_total_paid_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                        
+                                                        <td>Rs.{{item.total_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                        
+                                                            
+                                                    </tr>
+                                                {% endfor %}
+                                               
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- end table-responsive -->
+            
+                                    </div>
+                                </div>
+                            </div> <!-- end col -->
+        
+                           
+                        </div>
+                        <!-- end row -->
+        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+
+                <script>
+                    function filterCustomerNames() {
+                        var input = document.getElementById("inputPassword2");
+                        var filter = input.value.toUpperCase();
+                    
+                        var customerList = document.getElementById("customerNameList");
+                        var customers = customerList.getElementsByTagName("li");
+                    
+                        customerList.style.display = "block";
+                    
+                        for (var i = 0; i < customers.length; i++) {
+                            var customer = customers[i];
+                            var name = customer.textContent || customer.innerText;
+                            if (name.toUpperCase().indexOf(filter) > -1) {
+                                customer.style.display = "";
+                            } else {
+                                customer.style.display = "none";
+                            }
+                        }
+                    }
+                    
+                    function hideCustomerList() {
+                        var input = document.getElementById("inputPassword2");
+                        var customerList = document.getElementById("customerNameList");
+                    
+                        if (input.value.trim() === "") {
+                            customerList.style.display = "none";
+                        }
+                    }
+                    </script>
+
+{% endblock%}

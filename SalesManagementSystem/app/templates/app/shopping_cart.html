@@ -1,0 +1,148 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block title %} 
+cart
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                                            <li class="breadcrumb-item active">Customer Details</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Customer Details</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-8">
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>S.N</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th style="width: 50px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if customerdetails %}
+                                                            {% for item in customerdetails %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="apps-ecommerce-products-details.html"
+                                                                            class="text-body">{{item.product}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total_price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.quantity}} {{item.unit}}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{ item.quantity | multiply:item.total_price }}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            <tr>
+                                                                <h5>No item ...</h5>
+                                                            </tr>
+                                                            {% endif %}
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table-responsive-->
+
+                                               
+                                               
+                                            </div>
+                                            <!-- end col -->
+
+                                            <div class="col-lg-4">
+                                                <div class="border p-3 mt-4 mt-lg-0 rounded">
+                                                    <h4 class="header-title mb-3">Order Summary</h4>
+
+                                                    <div class="table-responsive">
+                                                        <table class="table mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Grand Total :</td>
+                                                                    <td>$1571.19</td>
+                                                                </tr>
+                                                                {% comment %} <tr>
+                                                                    <td>Discount : </td>
+                                                                    <td>-$157.11</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Shipping Charge :</td>
+                                                                    <td>$25</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Estimated Tax : </td>
+                                                                    <td>$19.22</td>
+                                                                </tr> {% endcomment %}
+                                                                <tr>
+                                                                    <th>Total :</th>
+                                                                    <th>$1458.3</th>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- end table-responsive -->
+                                                </div>
+
+
+                                            </div> <!-- end col -->
+
+                                        </div> <!-- end row -->
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+            
+
+       {%endblock%}

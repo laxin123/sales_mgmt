@@ -1,0 +1,171 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} 
+Inventory Products
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            <style>
+                #id_product_name{
+                    display: block;
+                    width: 100%;
+                    padding: 0.45rem 0.9rem;
+                    font-size: .9rem;
+                    font-weight: 400;
+                    line-height: 1.5;
+                    color: var(--ct-body-color);
+                    background-color: var(--ct-input-bg);
+                    background-clip: padding-box;
+                    border: var(--ct-border-width) solid var(--ct-border-color);
+                    -webkit-appearance: none;
+                    -moz-appearance: none;
+                    appearance: none;
+                    border-radius: 0.25rem;
+                }
+            </style>
+
+            <div class="content-page">
+
+                <!-- edite -->
+                <div class="" tabindex="-1" id="" aria-labelledby="offcanvasRightLabel" style="width: 100%;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Edit Inventory Product</h5>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Edit Inventory Product</h4>
+                                                    <br>
+                                                    <form method="post" action ="{% url 'app:inventoryproductEdite' product.id %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="{{form.product_name.id_for_label}}" class="form-label">Product Name</label>
+                                                                    {{form.product_name}}
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                        
+                                                           
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Rate retail</label>
+                                                                    <input name='{{ form.rate_retail.name }}' class="form-control" type="text" placeholder="Enter Retail Rate" id="billing-first-name" 
+                                                                    value="{{product.rate_manu}}" />
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Rate Wholesale</label>
+                                                                    <input name='{{ form.rate_wholesale.name }}' class="form-control" type="text" placeholder="Enter Wholesale Rate" id="billing-first-name" 
+                                                                    value="{{product.rate_wholesale}}" required/>
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Rate Manu</label>
+                                                                    <input name='{{ form.rate_manu.name }}' class="form-control" type="text" placeholder="Enter Rate Menu" id="billing-first-name" 
+                                                                    value="{{product.rate_manu}}" />
+
+                                                                    
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                        
+                                                           
+                                                     
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row ">
+                                                            <div class="col-sm-6">
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Update Product">
+                                                                
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+
+
+            
+                <style>
+                    #imageContainer {
+                        width: 100%;
+                        height: 100%;
+                        max-height:350px;
+                        border: 1px solid #ccc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    #imagePreview {
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+                </style>
+                <script>
+                    function showPreview(input) {
+                        if (input.files && input.files[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                document.getElementById('imagePreview').src = e.target.result;
+                            };
+                            reader.readAsDataURL(input.files[0]);
+                        }
+                    }
+                </script>
+       {%endblock%}

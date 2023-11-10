@@ -1,0 +1,426 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custome_filter %}
+{% load humanize %}
+{% block title %} 
+cart
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                            <li class="breadcrumb-item active">Sales Details</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Sales Details</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        {% comment %} <div class="row">
+                                            <div class="col-lg-8">
+                                                <div class="row mb-2 justify-content-between">
+                                                    <div class="col-md-12">
+                                                        <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                            <div class="col-md-4">
+                                                                <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                                <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+                                                            </div>
+                                                            <div class="col-md-2"></div>
+                                                             <div class="col-md-6">
+                                                                <div class="d-flex align-items-center">
+                                                                    <label for="status-select" class="me-2">Status</label>
+                                                                    <select class="form-select" id="status-select" >
+                                                                        <option selected>---Select ---</option>
+                                                                        <option value="1">Sales Dashboard by Product</option>
+                                                                        <option value="2">Sales Dashboard by Month</option>
+                                                                        <option value="3">Daily Sales Dashboard</option>
+                                                                        <option value="4">Today Dashboard (Customer Transaction)</option>
+                                                                        <option value="5">Customer Dashboard by Village/Toll</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div> 
+                                                            
+                                                           
+                                                        </form>                            
+                                                    </div>
+                                                    
+                                            
+                                                </div>
+
+
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>S.N</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th style="width: 50px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if customerdetails %}
+                                                            {% for item in customerdetails %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="#"
+                                                                            class="text-body">{{item.product}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total_price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.quantity}} {{item.unit}}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{ item.quantity | multiply:item.total_price }}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            <tr>
+                                                                <h5>No item ...</h5>
+                                                            </tr>
+                                                            {% endif %}
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table-responsive-->
+
+
+                                                
+                                                
+                                                           
+                                               
+                                               
+                                            </div>
+                                            <!-- end col -->
+
+                                            <div class="col-lg-4">
+                                                <div class="border p-3 mt-4 mt-lg-0 rounded">
+                                                    <h4 class="header-title mb-3">Order Summary</h4>
+
+                                                    <div class="table-responsive">
+                                                        <table class="table mb-0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>Grand Total :</td>
+                                                                    <td>$1571.19</td>
+                                                                </tr>
+                                                               
+                                                                <tr>
+                                                                    <th>Total :</th>
+                                                                    <th>$1458.3</th>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- end table-responsive -->
+                                                </div>
+
+
+                                            </div> <!-- end col -->
+
+                                        </div> <!-- end row --> {% endcomment %}
+
+
+                                        
+                                        <!--testing -->
+                                        <ul class="nav nav-tabs nav-bordered mb-3">
+                                            <li class="nav-item">
+                                                <a href="#today" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Today</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#daily" data-bs-toggle="tab" aria-expanded="true" class="nav-link ">
+                                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Daily</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#monthly" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Monthly</span>
+                                                </a>
+                                            </li>
+
+                                            <li class="nav-item">
+                                                <a href="#village" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Village / Toll</span>
+                                                </a>
+                                            </li>
+
+                                        </ul>
+                                        
+                                        <div class="tab-content">
+                                            <div class="tab-pane show active" id="today">
+                                                <div class="table-responsive table dt-responsive nowrap w-100" id="basic-datatable">
+                                                    <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>S.N</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th style="width: 50px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if daily_sales %}
+                                                            {% for item in daily_sales %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="#"
+                                                                            class="text-body">{{item.customer}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total_price|intcomma}}
+                                                                </td>
+                                                                <td>
+                                                                    {% comment %} {{item.quantity}} {{item.unit}} {% endcomment %}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            {% comment %} <tr>
+                                                                <h5>No item ...</h5>
+                                                            </tr> {% endcomment %}
+                                                            {% endif %}
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table-responsive-->
+                                            </div>
+                                            <div class="tab-pane " id="daily">
+                                                <div class="table-responsive">
+                                                    <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>S.N</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th style="width: 50px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if daily_sales %}
+                                                            {% for item in daily_sales %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="#"
+                                                                            class="text-body">{{item.customer}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total_price}}
+                                                                </td>
+                                                                <td>
+                                                                    {% comment %} {{item.quantity}} {{item.unit}} {% endcomment %}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            {% comment %} <tr>
+                                                                <h5>No item ...</h5>
+                                                            </tr> {% endcomment %}
+                                                            {% endif %}
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table-responsive-->
+                                            </div>
+                                            <div class="tab-pane" id="monthly">
+                                                <p><div class="table-responsive">
+                                                    <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>S.N</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th style="width: 50px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if customerdetails %}
+                                                            {% for item in customerdetails %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="#"
+                                                                            class="text-body">{{item.product}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total_price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.quantity}} {{item.unit}}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{ item.quantity | multiply:item.total_price }}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            {% comment %} <tr>
+                                                                <h5>No item ...</h5>
+                                                            </tr> {% endcomment %}
+                                                            {% endif %}
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table-responsive--></p>
+                                            </div>
+
+
+                                            <div class="tab-pane" id="village">
+                                                <p><div class="table-responsive">
+                                                    <table class="table table-borderless table-nowrap table-centered mb-0">
+                                                        <thead class="table-light">
+                                                            <tr>
+                                                                <th>S.N</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th>Quantity</th>
+                                                                <th>Total</th>
+                                                                <th style="width: 50px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% if customerdetails %}
+                                                            {% for item in customerdetails %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="#"
+                                                                            class="text-body">{{item.product}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total_price}}
+                                                                </td>
+                                                                <td>
+                                                                    {{item.quantity}} {{item.unit}}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{ item.quantity | multiply:item.total_price }}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% else %}
+                                                            {% comment %} <tr>
+                                                                <h5>No item ...</h5>
+                                                            </tr> {% endcomment %}
+                                                            {% endif %}
+
+                                                            
+                                                        </tbody>
+                                                    </table>
+                                                </div> <!-- end table-responsive--></p>
+                                            </div>
+
+                                        </div>
+
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row -->
+
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+
+            
+
+       {%endblock%}

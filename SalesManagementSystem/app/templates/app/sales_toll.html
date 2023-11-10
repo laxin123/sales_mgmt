@@ -1,0 +1,122 @@
+{% extends  'app/tablebase.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block content %}
+
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                <li class="breadcrumb-item active">Customer list</li>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">Customer list -<span class="text-primary"> {{toll}}</span></h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                
+                                    <div class="tab-content ">
+                                            <table id="row-callback-datatable" class="table table-striped dt-responsive nowrap w-100 ">
+                                                <thead>
+                                                    <tr>
+                                                    
+                                                        <th >S.N</th>
+                                                        <th>Date</th>
+                                                        <th >Customer</th>
+                                                        <th>Product</th>
+                                                        <th>Price</th>
+                                                        <th >Quantity</th>
+                                                        {% comment %} <th>Total</th> {% endcomment %}
+                                                        <th style="width: 120px;">Action</th>
+                                                    </tr>
+                                                </thead>
+                                            
+                                            
+                                                <tbody>
+                                                    {% for cust in customers %}
+                                                    {% for item in cust.customer.all %}
+                                                    <tr>
+                                                        <td >
+                                                            {{forloop.counter}}
+                                                        </td>
+                                                        
+                                                        <td><a href="{% url 'app:date_related_sales' item.nepali_create_date %}" style="font-size: large; font-weight: 800;">{{item.nepali_create_date}}</a></td>
+                                                        <td style="font-size: large; font-weight: 800;">{{item.customer}}</td>
+                                                        <td>
+                                                            <ul>
+                                                                {% for product in item.sales_id.all %}
+                                                                <li>{{product.product}}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
+                                                        <td >
+                                                            <ul>
+                                                                {% for product in item.sales_id.all %}
+                                                                <li>{{product.price}}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                            
+                                                        </td>
+                                                        <td>
+                                                            <ul>
+                                                                {% for product in item.sales_id.all %}
+                                                                <li>{{product.quantity}}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td>
+                                                        
+                                                            
+                                                        {% comment %} <td>
+                                                            <ul>
+                                                                {% for product in item.sales_id.all %}
+                                                                <li>{{product.price|multiply:product.quantity|nepalicurrencyFormat|remove_decimal}}</li>
+                                                                {% endfor %}
+                                                            </ul>
+                                                        </td> {% endcomment %}
+                                                        <td>
+                                                            <a href="javascript:void(0);" class="action-icon"> <i
+                                                                    class="mdi mdi-delete"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                    {% endfor %}
+
+                                                    
+
+                                                    
+                                                </tbody>
+                                    </table>                                           
+                                        
+                                    </div> <!-- end tab-content-->
+                                    
+                                </div> <!-- end card body-->
+                            </div> <!-- end card -->
+                        </div><!-- end col-->
+                    </div> <!-- end row-->
+                    
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+
+        </div> <!-- container -->
+
+</div> 
+
+{% endblock %}

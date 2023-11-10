@@ -1,0 +1,209 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} 
+Customer and Supplier
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            <style>
+                .scrollable-table {
+                    max-height: 400px; /* Set the maximum height for the table */
+                    overflow-y: auto; /* Add vertical scrollbar when content overflows */
+                }
+            </style>
+            
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                            <li class="breadcrumb-item active">Product - Unit </li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Product Unit</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        
+
+                        <div class="row">
+                           
+                            <div class="col-md-12 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive scrollable-table  ">
+                                            
+
+                                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#info-alert-modal"><i class="mdi mdi-plus"></i> Add New Toll</button>
+                                            <br>
+                                            <br>
+
+                                            <!-- add new toll Modal -->
+                                            <div id="info-alert-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm">
+                                                    <div class="modal-content">
+                                                        <div class="modal-body p-4">
+                                                            <div class="text-start">
+                                                                <form method="post" action ="{% url 'app:tolls' %}" enctype="multipart/form-data">
+                                                                    {% csrf_token %}
+                                                                    <input type="hidden" name="form_type" value="">
+                                                                    <input type="hidden" name="deleteToll" value="">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12">
+                                                                            <div class="mb-3">
+                                                                                <label for="billing-first-name" class="form-label text-center">Add Toll </label>
+                                                                                <input name='tollName' class="form-control" type="text" placeholder="Enter Toll Name"  />
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                    </div> <!-- end row -->
+                                                                   
+                                                                    
+                                                                      
+                                                                    </div> <!-- end row -->
+            
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-sm-6">
+                                                                            <input class="btn btn-danger" type="submit" name="submit" value="Add Toll">
+                                                                            
+                                                                        </div> <!-- end col -->
+                                                                       
+                                                                    </div> <!-- end row -->
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div><!-- /.modal-content -->
+                                                </div><!-- /.modal-dialog -->
+                                            </div>
+                                            <!-- end modal -->
+
+                                            <!-- delete toll modal -->
+                                            {% for item in toll %}
+                                            <div id="deleteToll-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-sm">
+                                                    <form method ="post" action="{% url 'app:tolls' %}">
+                                                        {% csrf_token %}
+                                                    <div class="modal-content">
+                                                        <input type="hidden" name="deleteToll" value="deleteToll">
+                                                        <input type="hidden" value="{{item.id}}" name="id">
+                                                        <div class="modal-header bg-danger">
+                                                            <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Toll</h4>
+                                                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Are your Sure ?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-danger">Yes</button>
+                                                        </div>
+                            
+                                                    </div><!-- /.modal-content -->
+                                                    </form>
+                                                </div><!-- /.modal-dialog -->
+                                            </div>
+                                            {% endfor %}
+
+
+                                            <table class="table table-centered table-nowrap mb-0  ">
+                                                <thead class="table-light sticky-top">
+                                                    <tr>
+                                                        <th>S.N</th>
+                                                        <th>Toll Name</th>
+                                                        <th>Remaining</th>
+                                                        <th>Action<th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="scrollable-table" >
+                                                    {% for item in toll %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        
+                                                        <td>
+                                                            <a href="{% url 'app:toll_details'  item.toll_slug %}">
+                                                            {{item.toll_name}}
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                         Rs.{{item.get_total_remaining_amount}}
+                                                        </td>
+
+                                                        <td>
+                                                        <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteToll-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+                                                        <td>
+
+                                                    </tr>
+                                                    {% endfor %}
+                                                    
+                                                    
+                                                    
+                                                </tbody>
+                                                
+                                            </table>
+                                        </div>
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        
+                        
+                        <!-- end row --> 
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+              
+
+                
+               
+
+                
+
+                
+                <script>
+                    $.NotificationApp.send("Title","Your awesome message text","Position","Background color","Icon")
+
+                </script>
+
+
+                   <style>
+                            #imageContainer {
+                                width: 100%;
+                                height: 100%;
+                                max-height:350px;
+                                border: 1px solid #ccc;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                overflow: hidden;
+                            }
+
+                            #imagePreview {
+                                max-width: 100%;
+                                max-height: 100%;
+                            }
+                        </style>
+                        <script>
+                            function showPreview(input) {
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        document.getElementById('imagePreview').src = e.target.result;
+                                    };
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                        </script>
+                            
+       {%endblock%}

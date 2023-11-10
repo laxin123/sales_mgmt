@@ -1,0 +1,73 @@
+{% for item in products%}
+{% if products %}
+<tr>
+    <td>
+        <img src="{{item.obj.image.url}}" alt="contact-img"
+            title="contact-img" class="rounded me-3" style="height:50px; width:100px; object-fit:cover;" />
+        <p class="m-0 d-inline-block align-middle font-16">
+            <a href="apps-ecommerce-products-details.html"
+                class="text-body">{{item.obj.product_name}}</a>
+            <br>
+        </p>
+    </td>
+    <td>
+        <input class="form-control"  type="number" name="price{{ item.id }}"  placeholder="Enter price" required>
+    </td>
+    <td>
+        <input type="number" min="1" value="1" name="quantity{{ item.id }}" class="form-control"
+            placeholder="Qty" style="width: 90px;">
+    </td>
+    <td>
+        <select name="unite{{ item.id }}" id="" class="form-control" >
+            
+            <option value="" selected>select</option>
+            {% for unite in unites %}
+            <option value="{{unite.id}}">{{unite.unit_name}}</option>
+            {% endfor %}
+            
+        </select>
+    </td>
+    <td>
+        <input class="form-control"  type="number" name="total-price{{ item.id }}" placeholder="Enter price">
+    </td>
+    <td>
+        <div class="action-icon btn ps-2 pe-2 delete_cart_item" data-product-id="{{ item.id }}">
+            <i class="mdi mdi-delete"></i>
+        </div>
+    </td>
+</tr>
+{% else %}
+<tr>
+    <h5 class="text-danger">No items ...</h5>
+</tr>
+{% endif %}
+{% endfor %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        
+        $(".delete_cart_item").click(function() {
+            var url = "{% url 'app:delete_cart_item' %}";
+            var product_id = $(this).data('product-id'); // Get the product ID from the data attribute
+
+            $.ajax({
+                type: "GET", // You can use "POST" if needed
+                url: url,
+                data: {
+                    'product_id': product_id
+                },
+                success: function(data) {
+                    console.log(data.message); // Log the message from the server items
+                    console.log(data.items)
+                    $("#items").html(data);
+                    
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.log("Error:", textStatus, errorThrown);
+                }
+            });
+        });
+    });
+</script>

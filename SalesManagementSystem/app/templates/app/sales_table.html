@@ -1,0 +1,247 @@
+{% extends  'app/tablebase.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block content %}
+<div class="content-page">
+    <div class="content">
+
+        <!-- Start Content-->
+        <div class="container-fluid">
+
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box">
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                <li class="breadcrumb-item active">Cash Book </li>
+                            </ol>
+                        </div>
+                        <h4 class="page-title">Cash Book</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <ul class="nav nav-tabs nav-bordered pt-2 bg-white">
+                        <li class="nav-item">
+                            <a href="#today" data-bs-toggle="tab" aria-expanded="false" class="nav-link active">
+                                <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Day</span>
+                            </a>
+                        </li>
+                        
+                        {% comment %} <li class="nav-item">
+                            <a href="#monthly" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Monthly</span>
+                            </a>
+                        </li> {% endcomment %}
+
+                        <li class="nav-item">
+                            <a href="#village" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                <span class="d-none d-md-block">Village / Toll</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                    
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="today">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                        
+                                            <div class="tab-content ">
+                                                    <table id="datatable-buttons" class="table table-striped dt-responsive nowrap w-100 ">
+                                                        <thead>
+                                                            <tr>
+                                                            
+                                                                <th >S.N</th>
+                                                                <th>Date</th>
+                                                                <th >Cash</th>
+                                                                <th>Credit</th>
+                                                                <th>Total</th>
+                                                            </tr>
+                                                        </thead>
+                                                    
+                                                    
+                                                        <tbody>
+                                                            {% for item in daily_sales %}
+                                                            
+                                                            <tr>
+                                                                <td >
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                
+                                                                <td><a href="{% url 'app:date_related_sales' item.nepali_create_date %}" style="font-size: large; font-weight: 800;">{{item.nepali_create_date}}</a></td>
+                                                                <td >
+                                                                    {{item.nepali_create_date|total_debit_amount|nepalicurrencyFormat|remove_decimal}}
+                                                                    
+                                                                </td>
+                                                                <td>
+                                                                    {{item.nepali_create_date|total_credite_amount|nepalicurrencyFormat|remove_decimal}}
+                                                                </td>
+                                                                
+                                                                    
+                                                                <td>{{ item.nepali_create_date|total_sales_for_nepali_date|nepalicurrencyFormat|remove_decimal }}</td>
+                                                               
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+
+                                                            
+    
+                                                            
+                                                        </tbody>
+                                            </table>                                           
+                                                
+                                            </div> <!-- end tab-content-->
+                                            
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div><!-- end col-->
+                            </div> <!-- end row-->
+
+                        </div>
+                        
+                        {% comment %} <div class="tab-pane" id="monthly">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                        
+                                            <div class="tab-content ">
+                                                    <table id="row-callback-datatable" class="table table-striped dt-responsive nowrap w-100 ">
+                                                        <thead>
+                                                            <tr>
+                                                            
+                                                                <th >S.N </th>
+                                                                <th >Year</th>
+                                                                <th>Month</th>
+                                                                <th>Total</th>
+        
+                                                                <th style="width: 120px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                    
+                                                    
+                                                        <tbody>
+                                                            {% if monthly_totals %}
+                                                            {% for item in monthly_totals %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        {{item.created_date__year}}
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>
+                                                                    {{item.created_date__month}}
+                                                                </td>
+                                                                <td>
+                                                                    Rs.{{item.total}}
+                                                                </td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+                                                            {% endif %}
+    
+                                                            
+                                                        </tbody>
+                                            </table>                                           
+                                                
+                                            </div> <!-- end tab-content-->
+                                            
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div><!-- end col-->
+                            </div> <!-- end row-->
+                        </div> {% endcomment %}
+
+
+                        <div class="tab-pane" id="village">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                        
+                                            <div class="tab-content ">
+                                                    <table id="fixed-header-datatable" class="table table-striped dt-responsive nowrap w-100 ">
+                                                        <thead>
+                                                            <tr>
+                                                            
+                                                                <th >S.N</th>
+                                                                <th >Toll Name</th>
+                                                                <th>Credit</th>
+                                                                <th>Cash</th>
+                                                                <th>Total Price</th>
+                                                                <th style="width: 120px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                    
+                                                    
+                                                        <tbody>
+                                                            {% for item in tolls %}
+                                                            <tr>
+                                                                <td>
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                <td>
+                                                                    <p class="m-0 d-inline-block align-middle font-16">
+                                                                        <a href="{% url 'app:toll_related_sales' item.toll_slug %}"
+                                                                            class="text-body" style="font-size: large; font-weight: 800;">{{item.toll_name}}</a>
+                                                                        
+                                                                    </p>
+                                                                </td>
+                                                                <td>{{item.get_total_paid_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                                <td>{{item.get_total_remaining_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                                
+                                                                <td>{{item.get_total_amount|nepalicurrencyFormat|remove_decimal}}</td>
+                                                                <td>
+                                                                    <a href="javascript:void(0);" class="action-icon"> <i
+                                                                            class="mdi mdi-delete"></i></a>
+                                                                </td>
+                                                                
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+    
+                                                            
+                                                        </tbody>
+                                            </table>                                           
+                                                
+                                            </div> <!-- end tab-content-->
+                                            
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div><!-- end col-->
+                            </div> <!-- end row-->
+                        </div>
+
+                    </div>
+                </div> <!-- end col -->
+            </div>
+            <!-- end row -->
+
+        </div> <!-- container -->
+
+    </div> <!-- content -->
+
+        
+{% endblock %} 
+  
+
+        

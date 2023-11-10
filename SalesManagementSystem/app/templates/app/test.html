@@ -1,0 +1,47 @@
+<form method="post" id="dynamic-form">
+    {% csrf_token %}
+    {{ daily_form.as_p }}
+
+    {{ daily_transaction_formset.management_form }}
+    <div id="formset-container">
+        {% for form in daily_transaction_formset %}
+            <div class="formset">
+                {{ form.as_p }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="button" id="add-form">Add Another</button>
+    <button type="submit">Submit</button>
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        let formset = $('#formset-container');
+        let addButton = $('#add-form');
+        let initialFormCount = formset.children().length; // Number of initially loaded forms
+
+        addButton.click(function () {
+            let totalForms = formset.children().length;
+            let newForm = `<div class="formset">${formset.find('.formset').first().html()}</div>`;
+            
+            newForm = newForm.replace(/form-(\d{1,2})/g, `form-${totalForms}`);
+            newForm += '<button type="button" class="remove-form">Remove</button>';
+            formset.append(newForm);
+            $('#id_form-TOTAL_FORMS').val(totalForms - initialFormCount);
+        });
+
+        // Adding remove functionality for newly added forms
+        $(document).on('click', '.remove-form', function () {
+            let formIndex = $(this).parent().index();
+            if (formIndex >= initialFormCount) {
+                
+                $(this).parent().remove();
+                // Update the total forms count
+                let forms = $('.formset');
+                $('#id_form-TOTAL_FORMS').val(forms.length - initialFormCount);
+            }
+        });
+    });
+</script>

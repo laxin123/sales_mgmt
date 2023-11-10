@@ -1,0 +1,744 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block title %} 
+User
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            <style>
+                .scrollable-table {
+                    max-height: 400px; /* Set the maximum height for the table */
+                    overflow-y: auto; /* Add vertical scrollbar when content overflows */
+                }
+
+                .suggestion-list {
+                    position: absolute;
+                    z-index: 1000; /* Adjust the z-index as needed */
+                    max-height: 200px;
+                    overflow-y: auto;
+                    background-color: #fff;
+                    border: 1px solid #ccc;
+                    border-top: none; /* Hide top border to overlap with the input field */
+                    display: none; /* Initially hidden */
+                    width: 72%; /* Match the width of the input field */
+                }
+                #inputPassword2 {
+                    position: relative; /* Ensure relative positioning to allow absolute positioning of the suggestion list */
+                }
+
+                .btn-circle.btn-xl {
+                    width: 70px;
+                    height: 70px;
+                    padding: 10px 16px;
+                    border-radius: 35px;
+                    font-size: 24px;
+                    line-height: 1.33;
+                }
+                
+                .btn-circle {
+                    width: 15px;
+                    height: 10px;
+                    padding: 6px 0px;
+                    border-radius: 15px;
+                    text-align: center;
+                    font-size: 12px;
+                    line-height: 1.42857;
+                }
+                
+
+            </style>
+            
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                            <li class="breadcrumb-item active">User</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">User</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+                        
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-body" >
+                                        {% if messages %}
+                                            {% for msg in messages %}
+                                                <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                    <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                       
+                                        
+                                        <div class="tab-content">
+                                            {% comment %} <ul class="nav nav-pills bg-primary nav-justified mb-3">
+                                                <li class="nav-item">
+                                                    <span class="d-none d-md-block p-1 text-white">User Table </span>
+                                                </li>
+                                                
+                                             
+                                            </ul> {% endcomment %}
+
+                                            <!-- Billing Content-->
+                                            <div class="tab-pane show active" id="customer">
+                                                <div class="row mb-2 justify-content-between">
+                                                    <div class="col-md-4">
+                                                        <div class=" ">
+                                                           <h4>User Table</h4>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4 float-end">
+                                                        <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                            <div class="col-12">
+                                                                <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                                <input type="search" class="form-control" id="inputPassword2" placeholder="Search..." onkeyup="filterCustomerNames()" onblur="hideCustomerList()">
+                                                                <ul id="customerNameList" class="suggestion-list">
+                                                                    {% for customer in customerlist %}
+                                                                        <li style="list-style-type: none; padding: 5px;">
+                                                                            <a href="{% url 'app:salesList' customer.id %}">
+                                                                                {{ customer.name }}
+                                                                            </a>
+                                                                        </li>
+                                                                    {% endfor %}
+                                                                </ul>
+                                                            </div>
+                                                        </form>
+                                                                               
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        {% if request.user.is_superuser %}
+                                                        <div class="float-end ">
+                                                            <a class="btn btn-danger"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="mdi mdi-plus"></i> Add </a>
+
+                                                            <!--add-->
+                                                        </div>
+                                                        {% endif %}
+                                                    </div><!-- end col-->
+                                            
+                                                </div>
+                                    
+                                        
+                                             <div class="table-responsive scrollable-table  ">
+                                           
+                                            <table class="table table-centered  mb-0 ">
+                                                <thead class="table-light " style="position: sticky; top: 0; background-color: #fff; z-index: 1;"> <!--sticky-top-->
+                                                    <tr>
+                                                        <th>S.N</th>
+                                                        <th>Full Name</th>
+                                                        <th>Address</th>
+                                                        <th>E-mail<th>
+                                                        <th>Phone No</th>
+                                                        <th>User Type</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="" >
+                                                    {% for user in userlist %}
+                                                    <tr>
+                                                        <td>{{forloop.counter}}</td>
+                                                        <td><a href="#" class="text-body fw-bold">{{user.fullname}}</a> </td>
+                                                        
+                                                        <td>
+                                                            {{user.address}}
+                                                        </td>
+                                                        <td>{{user.email}}</td>
+                                                        <td></td>
+                                                        <td>{{user.phone_No}}</td>
+                                                        <td>
+                                                            {% if user.is_superuser %}
+                                                            <button type="button" class="btn btn-success btn-circle"><i class="bi bi-check"></i>
+                                                            </button>
+                                                            Super User 
+                                                            {% else %}
+                                                            <button type="button" class="btn btn-danger btn-circle"><i class="bi bi-check"></i>
+                                                            </button>
+                                                            User
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>
+                                                            {% comment %} <a class="btn"  data-bs-toggle="offcanvas" data-bs-target="#customeredite-{{customer.id}}" aria-controls="offcanvasRight"><i class="mdi mdi-square-edit-outline"></i></a> {% endcomment %}
+                                                            <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deleteuser-{{user.id}}"><i class="mdi mdi-delete"></i></button>
+                                                        </td>
+                                                    </tr>
+
+
+
+                                                    <!-- customer delete-->
+                                                    <div id="deleteuser-{{user.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog">
+                                                            <form method ="post" action="{% url 'app:deleteUser' %}">
+                                                                {% csrf_token %}
+                                                            <div class="modal-content">
+                                                                <input type="hidden" value="{{user.id}}" name="userID">
+                                                                <div class="modal-header bg-danger">
+                                                                    <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete User</h4>
+                                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    Are your Sure ?
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                                                    <button type="submit" class="btn btn-danger">Yes</button>
+                                                                </div>
+                                    
+                                                            </div><!-- /.modal-content -->
+                                                            </form>
+                                                        </div><!-- /.modal-dialog -->
+                                                    </div>
+                                                    {% endfor %}
+                                                    
+                                                   </tbody>
+                                            </table>
+                                    </div>
+                                    </div>
+                                    <div>
+                                        
+                                    </div>
+                                      
+                           
+                                  
+                                    </div> <!-- end card-body-->
+
+                                </div> <!-- end card-->
+                                
+                            </div> <!-- end col -->
+                            
+                        </div>
+                        
+                        
+                        <!-- end row --> 
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+              
+
+                
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Add User</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">User Information</h4>
+
+                                                    <p class="text-muted mb-4">Fill the form below in order to create new user.</p>
+
+                                                    <form method="post" action ="{% url 'app:user' %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Full Name<span class="text-danger">*</span></label>
+                                                                    <input name="{{userform.fullname.name}}" class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" required />
+                                                                </div>
+                                                            </div>
+                                                            
+                                               
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-last-name" class="form-label">Address<span class="text-danger">*</span></label>
+                                                                    <input name ="{{userform.address.name}}" class="form-control" type="text" placeholder="Enter your last name" id="billing-last-name" required />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                                    <input name="{{userform.phone_No.name}}" class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="billing-phone" required/>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-email-address" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                                    <input name="{{userform.email.name}}" class="form-control" type="email" placeholder="Enter your email" id="billing-email-address" required />
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-phone" class="form-label">Password <span class="text-danger">*</span></label>
+                                                                    <input name="{{userform.password.name}}" class="form-control" type="password" placeholder="***********" id="billing-phone" required/>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-md-12">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-phone" class="form-label">Confirm Password <span class="text-danger">*</span></label>
+                                                                    <input name="{{userform.password2.name}}" class="form-control" type="password" placeholder="***********" id="billing-phone" required/>
+                                                                </div>
+                                                            </div>
+
+                                                            
+                                                        </div> <!-- end row -->
+                                                        
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row mt-1">
+                                                            <div class="col-sm-12 ">
+                                                                <center>
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Add Customer">
+                                                                </center>
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+
+
+                <!-- supplier-->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="supplierAdd" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Add Supplier</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Supplier Information</h4>
+
+                                                    <p class="text-muted mb-4">Fill the form below in order to
+                                                        send you the order's invoice.</p>
+
+                                                        <form method="post" action ="{% url 'app:customers' %}" enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="form_type" value="">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-first-name" class="form-label">Full Name</label>
+                                                                        <input name='fullname' class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-last-name" class="form-label">Address</label>
+                                                                        <input name ="address" class="form-control" type="text" placeholder="Enter your last name" id="billing-last-name" />
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-email-address" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                                        <input name="email" class="form-control" type="email" placeholder="Enter your email" id="billing-email-address" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                                        <input name="phoneNo" class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="billing-phone" />
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                            
+                                                               
+                                                            </div> <!-- end row -->
+    
+                                                            <div class="row mt-4">
+                                                                <div class="col-sm-6">
+                                                                    <input class="btn btn-danger" type="submit" name="submit" value="Add Supplier">
+                                                                    
+                                                                </div> <!-- end col -->
+                                                               
+                                                            </div> <!-- end row -->
+                                                        </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+
+                
+
+
+                <!--customer edite modal -->
+                {% for customer in customerlist %}
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="customeredite-{{customer.id}}" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Edite Customers</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Customer Information</h4>
+
+                                                    <p class="text-muted mb-4">Fill the form below in order to
+                                                        send you the order's invoice.</p>
+
+                                                    <form method="post" action ="{% url 'app:updatecustomer' %}" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="customerID" value="{{customer.id}}">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Full Name<span class="text-danger">*</span></label>
+                                                                    <input name="{{customerform.name.name}}" class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" value="{{customer.name}}" />
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <!-- toll -->
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">Toll or Village </label>
+                                                                    {% comment %} {{customerform.toll}} {% endcomment %}
+                                                                    <select name="{{customerform.toll.name}}" id="" class="form-control" required >
+                                                                        {% for item in toll %}
+                                                                        <option value="{{ item.id }}"
+                                                                            {% if item.id == customer.toll.id %}
+                                                                                 selected
+                                                                            {% endif %}>
+                                                                            {{item.toll_name}}
+                                                                        </option>
+                                                                        {% endfor %}
+
+                                                                        {% comment %} <option value="{{ customer.toll.id }}">{{ customer.toll.toll_name }}</option> {% endcomment %}
+
+                                                                        
+                                                                    </select> 
+                                                                </div>
+                                                            </div>
+
+
+                                                            
+
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-last-name" class="form-label">Address<span class="text-danger">*</span></label>
+                                                                    <input name ="{{customerform.address.name}}" class="form-control" type="text" placeholder="Enter your last name" id="billing-last-name" value="{{customer.address}}" required />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-email-address" class="form-label">Email Address </label>
+                                                                    <input name="{{customerform.email.name}}" class="form-control" type="email" placeholder="Enter your email" id="billing-email-address" value="{{customer.email}}" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                                    <input name="{{customerform.phone_number.name}}" class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="billing-phone" value="{{customer.phone_number}}" required/>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row -->
+                                                        
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row mt-4">
+                                                            <div class="col-sm-6">
+                                                                <input class="btn btn-danger" type="submit" name="submit" value="Update">
+                                                                
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+                {% endfor %}
+                
+
+                {% for supplier in sellers %}
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="supplieredite-{{supplier.id}}" aria-labelledby="offcanvasRightLabel" style="width: 500px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Edite Supplier</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Supplier Information</h4>
+
+                                                    <p class="text-muted mb-4">Fill the form below in order to
+                                                        send you the order's invoice.</p>
+
+                                                        <form method="post" action ="{% url 'app:sellerupdate' %}" enctype="multipart/form-data">
+                                                            {% csrf_token %}
+                                                            <input type="hidden" name="supplierid" value="{{supplier.id}}">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-first-name" class="form-label">Full Name</label>
+                                                                        <input name="{{sellerform.name.name}}" class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" value="{{supplier.name}}" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-last-name" class="form-label">Address</label>
+                                                                        <input name ="{{sellerform.address.name}}" class="form-control" type="text" placeholder="Enter your last name" id="billing-last-name" value="{{supplier.address}}" />
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-email-address" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                                        <input name="{{sellerform.email.name}}" class="form-control" type="email" placeholder="Enter your email" id="billing-email-address" value="{{supplier.email}}" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                                                        <input name="{{sellerform.phone_number.name}}" class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="billing-phone" value="{{supplier.phone_number}}" />
+                                                                    </div>
+                                                                </div>
+                                                            </div> <!-- end row -->
+                                                            
+                                                               
+                                                            </div> <!-- end row -->
+    
+                                                            <div class="row mt-4">
+                                                                <div class="col-sm-6">
+                                                                    <input class="btn btn-danger" type="submit" name="submit" value="Update Supplier">
+                                                                    
+                                                                </div> <!-- end col -->
+                                                               
+                                                            </div> <!-- end row -->
+                                                        </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                </div>
+                {% endfor %}
+
+                <script>
+                    $.NotificationApp.send("Title","Your awesome message text","Position","Background color","Icon")
+
+                </script>
+
+
+                   <style>
+                            #imageContainer {
+                                width: 100%;
+                                height: 100%;
+                                max-height:350px;
+                                border: 1px solid #ccc;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                overflow: hidden;
+                            }
+
+                            #imagePreview {
+                                max-width: 100%;
+                                max-height: 100%;
+                            }
+                        </style>
+                        <script>
+                            function showPreview(input) {
+                                if (input.files && input.files[0]) {
+                                    var reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        document.getElementById('imagePreview').src = e.target.result;
+                                    };
+                                    reader.readAsDataURL(input.files[0]);
+                                }
+                            }
+                        </script>
+
+
+<script>
+    function filterCustomerNames() {
+        // Get the input value for customers
+        var input = document.getElementById("inputPassword2");
+        var filter = input.value.toUpperCase();
+
+        // Get the input value for sellers
+        var searchinput = document.getElementById("searchinput");
+        var filter1 = searchinput.value.toUpperCase();
+
+        // Get the list of customer names and supplier names
+        var customerList = document.getElementById("customerNameList");
+        var supplierlist = document.getElementById("supplierlist");
+        var customers = customerList.getElementsByTagName("li");
+        var suppliers = supplierlist.getElementsByTagName("li");
+
+        // Show the customer list and supplier list
+        customerList.style.display = "block";
+        supplierlist.style.display = "block";
+
+        // Filter and display customer names
+        for (var i = 0; i < customers.length; i++) {
+            var customer = customers[i];
+            var name = customer.textContent || customer.innerText;
+            if (name.toUpperCase().indexOf(filter) > -1) {
+                customer.style.display = "";
+            } else {
+                customer.style.display = "none";
+            }
+        }
+
+        // Filter and display supplier names
+        for (var i = 0; i < suppliers.length; i++) {
+            var supplier = suppliers[i];
+            var name = supplier.textContent || supplier.innerText;
+            if (name.toUpperCase().indexOf(filter1) > -1) {
+                supplier.style.display = "";
+            } else {
+                supplier.style.display = "none";
+            }
+        }
+    }
+
+    function hideCustomerList() {
+        // Hide the customer list if there's no input
+        var input = document.getElementById("inputPassword2");
+        var customerList = document.getElementById("customerNameList");
+
+        // Hide the supplier list if there's no input
+        var searchinput = document.getElementById("searchinput");
+        var supplierlist = document.getElementById("supplierlist");
+
+        if (input.value.trim() === "") {
+            customerList.style.display = "none";
+        }
+        if (searchinput.value.trim() === "") {
+            supplierlist.style.display = "none";
+        }
+    }
+</script>
+
+
+                        
+                        
+                        
+                            
+       {%endblock%}

@@ -1,0 +1,543 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %} 
+Orders
+{% endblock %}
+{% block body %}
+            <!-- ============================================================== -->
+            <!-- Start Page Content here -->
+            <!-- ============================================================== -->
+            <style>
+                .scrollable-table {
+                    max-height: 400px; /* Set the maximum height for the table */
+                    overflow-y: auto; /* Add vertical scrollbar when content overflows */
+                }
+            </style>
+            
+            <div class="content-page">
+                <div class="content">
+
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Hyper</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">eCommerce</a></li>
+                                            <li class="breadcrumb-item active">Orders</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">Orders</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- end page title -->
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body" >
+                                        
+                                        <!-- Checkout Steps -->
+                                        <ul class="nav nav-pills bg-nav-pills nav-justified mb-3">
+                                            <li class="nav-item">
+                                                <a href="#customer" data-bs-toggle="tab" aria-expanded="false"
+                                                    class="nav-link rounded-0 active">
+                                                    <i class="mdi mdi-account-circle font-18"></i>
+                                                    <span class="d-none d-lg-block">Customers </span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#supplier" data-bs-toggle="tab" aria-expanded="true" class="nav-link rounded-0">
+                                                    <i class="mdi mdi-truck-fast font-18"></i>
+                                                    <span class="d-none d-lg-block">Suppliers </span>
+                                                </a>
+                                            </li>
+                                        
+                                        </ul>
+                                        <div class="tab-content">
+
+                                            <!-- Billing Content-->
+                                            <div class="tab-pane show active" id="customer">
+                                                <div class="row mb-2">
+                                                    <div class="col-xl-8">
+                                                        <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                            <div class="col-4">
+                                                                <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                                <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <div class="d-flex align-items-center">
+                                                                    <label for="status-select" class="me-2">Status</label>
+                                                                    <select class="form-select" id="status-select">
+                                                                        <option selected>Choose...</option>
+                                                                        <option value="1">Paid</option>
+                                                                        <option value="2">Awaiting Authorization</option>
+                                                                        <option value="3">Payment failed</option>
+                                                                        <option value="4">Cash On Delivery</option>
+                                                                        <option value="5">Fulfilled</option>
+                                                                        <option value="6">Unfulfilled</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </form>                            
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <div class=" ">
+                                                            <a href="{%url 'app:form' %}" class="btn btn-danger ">Report</a>
+
+                                                            <a class="btn btn-danger"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="mdi mdi-plus"></i> Add </a>
+                                                        
+
+                                                        
+                                                            {% comment %} <button type="button" class="btn btn-light">Export</button> {% endcomment %}
+                                                        </div>
+                                                 </div><!-- end col-->
+                                             </div>
+                                    
+                                        <div class="table-responsive scrollable-table  ">
+                                            <table class="table table-centered table-nowrap mb-0 ">
+                                                <thead class="table-light sticky-top">
+                                                    <tr>
+                                                    
+                                                        <th>Order ID</th>
+                                                     
+                                                        <th>Total</th>
+                                                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="" >
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                            
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9707</a> </td>
+                                                  
+                                                        <td>
+                                                            $1,458.65
+                                                        </td>
+                                                    
+                                                    </tr>
+                                                    <tr>
+                                                     
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9706</a> </td>
+                                                    
+                                                        <td>
+                                                            $801.99
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                      
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9705</a> </td>
+                                                       
+                                                        <td>
+                                                            $215.35
+                                                        </td>
+                                                      
+                                                    
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                    </div>
+                                    <div>
+                                        
+                                    </div>
+                                       <!-- Shipping Content-->
+                                       <div class="tab-pane" id="supplier">
+                                        <div class="row mb-2">
+                                            <div class="col-xl-8">
+                                                <form class="row gy-2 gx-2 align-items-center justify-content-xl-start justify-content-between">
+                                                    <div class="col-4">
+                                                        <label for="inputPassword2" class="visually-hidden">Search</label>
+                                                        <input type="search" class="form-control" id="inputPassword2" placeholder="Search...">
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <div class="d-flex align-items-center">
+                                                            <label for="status-select" class="me-2">Status</label>
+                                                            <select class="form-select" id="status-select">
+                                                                <option selected>Choose...</option>
+                                                                <option value="1">Paid</option>
+                                                                <option value="2">Awaiting Authorization</option>
+                                                                <option value="3">Payment failed</option>
+                                                                <option value="4">Cash On Delivery</option>
+                                                                <option value="5">Fulfilled</option>
+                                                                <option value="6">Unfulfilled</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </form>                            
+                                            </div>
+                                            <div class="col-4">
+                                                <div class=" ">
+                                                    <a href="{%url 'app:form' %}" class="btn btn-danger ">Report</a>
+
+                                                    <a class="btn btn-danger"  data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"><i class="mdi mdi-plus"></i> Add </a>
+                                                
+
+                                                 
+                                                    {% comment %} <button type="button" class="btn btn-light">Export</button> {% endcomment %}
+                                                </div>
+                                            </div><!-- end col-->
+                                        </div>
+                                 
+                                        <div class="table-responsive scrollable-table  ">
+                                            <table class="table table-centered table-nowrap mb-0 ">
+                                                <thead class="table-light sticky-top">
+                                                    <tr>
+                                                    
+                                                        <th>Order ID</th>
+                                                     
+                                                        <th>Total</th>
+                                                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="" >
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                    
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9708</a> </td>
+                                                     
+                                                        <td>
+                                                            $176.41
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                            
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9707</a> </td>
+                                                  
+                                                        <td>
+                                                            $1,458.65
+                                                        </td>
+                                                    
+                                                    </tr>
+                                                    <tr>
+                                                     
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9706</a> </td>
+                                                    
+                                                        <td>
+                                                            $801.99
+                                                        </td>
+                                                     
+                                                    </tr>
+                                                    <tr>
+                                                      
+                                                        <td><a href="{% url 'app:orders_details' %}" class="text-body fw-bold">#BM9705</a> </td>
+                                                       
+                                                        <td>
+                                                            $215.35
+                                                        </td>
+                                                      
+                                                    
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                
+                                        
+                                                  
+                                        </div> <!-- end row-->
+                                    </div>
+                                    <!-- End Shipping Information Content-->
+                           
+                                  
+                                    </div> <!-- end card-body-->
+
+                                </div> <!-- end card-->
+                                
+                            </div> <!-- end col -->
+                            <div class="col-md-6 ">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <img src="{% static 'app/assets/images/products/product-1.jpg' %}" class="img-fluid" style="height:540px;">
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+                            </div> <!-- end col -->
+                        </div>
+                        
+                        
+                        <!-- end row --> 
+                        
+                    </div> <!-- container -->
+
+                </div> <!-- content -->
+              
+
+                
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel" style="width: 650px;">
+                    <div class="offcanvas-header">
+                      <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                      <!-- ... -->
+
+                      <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+                                 
+                                    <!-- Steps Information -->
+                                    <div class="tab-content">
+
+                                        <!-- Billing Content-->
+                                        <div class="tab-pane show active" id="billing-information">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <h4 class="mt-2">Billing information</h4>
+
+                                                    <p class="text-muted mb-4">Fill the form below in order to
+                                                        send you the order's invoice.</p>
+
+                                                    <form>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-first-name" class="form-label">First Name</label>
+                                                                    <input class="form-control" type="text" placeholder="Enter your first name" id="billing-first-name" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-last-name" class="form-label">Last Name</label>
+                                                                    <input class="form-control" type="text" placeholder="Enter your last name" id="billing-last-name" />
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row -->
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-email-address" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                                                    <input class="form-control" type="email" placeholder="Enter your email" id="billing-email-address" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-phone" class="form-label">Phone <span class="text-danger">*</span></label>
+                                                                    <input class="form-control" type="text" placeholder="(xx) xxx xxxx xxx" id="billing-phone" />
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row -->
+                                                        
+                                                           
+                                                     <!-- end row -->
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-town-city" class="form-label">Town / City</label>
+                                                                    <input class="form-control" type="text" placeholder="Enter your city name" id="billing-town-city" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-state" class="form-label">State</label>
+                                                                    <input class="form-control" type="text" placeholder="Enter your state" id="billing-state" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="mb-3">
+                                                                    <label for="billing-zip-postal" class="form-label">Zip / Postal Code</label>
+                                                                    <input class="form-control" type="text" placeholder="Enter your zip code" id="billing-zip-postal" />
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row -->
+                                                        <div class="row">
+                                                            <div class="col-6">
+                                                               
+                                                                    <div class="mb-3">
+                                                                        <label for="billing-address" class="form-label">Address</label>
+                                                                        <input class="form-control" type="text" placeholder="Enter full address" id="billing-address">
+                                                                    </div>
+                                                          
+                                                            </div>
+                                                            <div class="col-6">
+                                                               
+                                                                <div class="mb-3">
+                                                                    <label for="billing-address" class="form-label">Address</label>
+                                                                    <input class="form-control" type="text" placeholder="Enter full address" id="billing-address">
+                                                                </div>
+                                                            
+                                                            </div>
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="mb-3">
+                                                                    <div class="form-check">
+                                                                        <input type="checkbox" class="form-check-input" id="customCheck2">
+                                                                        <label class="form-check-label" for="customCheck2">Ship to different address ?</label>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3 mt-3">
+                                                                    <label for="example-textarea" class="form-label">Order Notes:</label>
+                                                                    <textarea class="form-control" id="example-textarea" rows="3" placeholder="Write some note.."></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row -->
+
+                                                        <div class="row mt-4">
+                                                            <div class="col-sm-6">
+                                                                <a href="apps-ecommerce-shopping-cart.html" class="btn btn-danger">
+                                                                    <i class="mdi "></i> Add to Shopping Cart </a>
+                                                            </div> <!-- end col -->
+                                                           
+                                                        </div> <!-- end row -->
+                                                    </form>
+                                                </div>
+                                                 
+                                            </div> <!-- end row-->
+                                        </div>
+                                        <!-- End Billing Information Content-->
+
+
+                                   
+
+                                    </div> <!-- end tab content-->
+
+                                </div> <!-- end card-body-->
+                            </div> <!-- end card-->
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row-->
+                    </div>
+                  </div>
+                  
+       {%endblock%}

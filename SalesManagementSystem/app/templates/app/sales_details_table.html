@@ -1,0 +1,165 @@
+{% extends  'app/tablebase.html' %}
+{% load static %}
+{% load custome_filter %}
+{% block content %}
+        <div class="content-page">
+            <div class="content">
+
+                <!-- Start Content-->
+                <div class="container-fluid">
+
+                    <!-- start page title -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box">
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Sales Management System</a></li>
+                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Cash Book</a></li>
+                                    </ol>
+                                </div>
+                                <h4 class="page-title">Sales Details -<span class="text-primary"> {{date}}</span></h4>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end page title -->
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            {% if messages %}
+                                            {% for msg in messages %}
+                                                    <div class="alert alert-{{ msg.tags }} alert-dismissible text-bg-{{ msg.tags }} border-0 fade show" role="alert">
+                                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                                        <strong>{% if msg.tags == 'success' %}Success{% elif msg.tags == 'warning' %}Warning{% endif %} - </strong>{{ msg.message }}
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                            <div class="tab-content ">
+                                                    <table id="row-callback-datatable" class="table table-striped dt-responsive nowrap w-100 ">
+                                                        <thead>
+                                                            <tr>
+                                                            
+                                                                <th >S.N</th>
+                                                                <th>Date</th>
+                                                                <th >Customer</th>
+                                                                <th>Product</th>
+                                                                <th>Price</th>
+                                                                <th >Quantity</th>
+                                                                <th style="width: 120px;">Action</th>
+                                                            </tr>
+                                                        </thead>
+                                                    
+                                                    
+                                                        <tbody>
+                                                            {% for item in sales %}
+                                                           
+                                                            <tr>
+                                                                <td >
+                                                                    {{forloop.counter}}
+                                                                </td>
+                                                                
+                                                                <td>{{item.nepali_create_date}}</td>
+                                                                <td><a href="{% url 'app:salesList' item.customer.id %}" style="font-size: large; font-weight: 800;">{{item.customer}}</a></td>
+                                                                <td>
+                                                                    <ul>
+                                                                    {% if item.sales_id.all %}
+                                                                    
+                                                                        {% for product in item.sales_id.all %}
+                                                                        <li>{{product.product}}</li>
+                                                                        {% endfor %}
+                                                                    
+                                                                    {% else %}
+                                                                        <li>{{item.remarks}}</li>
+                                                                    {% endif %}
+                                                                    </ul>
+                                                                </td>
+                                                                <td >
+                                                                    <ul>
+                                                                        {% if item.sales_id.all %}
+                                                                            {% for product in item.sales_id.all %}
+                                                                            <li>{{product.price|nepalicurrencyFormat|remove_decimal}}</li>
+                                                                            {% endfor %}
+                                                                            <small class="text-danger">Credit</small>
+                                                                        {% else %}
+                                                                            <li>{{item.paid_amount|nepalicurrencyFormat|remove_decimal}}</li>
+                                                                            <small class="text-success">Cash</small>
+                                                                        {% endif %}
+                                                                    </ul>
+                                                                    
+                                                                </td>
+                                                                <td>
+                                                                    <ul>
+                                                                        {% for product in item.sales_id.all %}
+                                                                            <li>{{product.quantity}}</li>
+                                                                        {% empty %}
+                                                                            -
+                                                                        {% endfor %}
+                                                                    </ul>
+                                                                </td>
+                                                               
+                                                                    
+                                                                
+                                                                <td>
+                                                                    <button  type="button" class="btn" data-bs-toggle="modal" data-bs-target="#deletesales-{{item.id}}"><i class="mdi mdi-delete"></i></button>
+                                                                </td>
+                                                            </tr>
+                                                            
+                                                            {% endfor %}
+
+                                                            
+    
+                                                            
+                                                        </tbody>
+                                            </table>                                           
+                                                
+                                            </div> <!-- end tab-content-->
+                                            
+                                        </div> <!-- end card body-->
+                                    </div> <!-- end card -->
+                                </div><!-- end col-->
+                            </div> <!-- end row-->
+                            
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                </div> <!-- container -->
+
+            </div> <!-- content -->
+
+
+
+
+            <!-- sales delete model -->
+            {% for item in sales %}
+            <div id="deletesales-{{item.id}}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="danger-header-modalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <form method ="post" action="{% url 'app:deletesales' %}">
+                        {% csrf_token %}
+                    <div class="modal-content">
+                        <input type="hidden" value="{{item.id}}" name="salesID">
+                        <input type="hidden" value="{{item.nepali_create_date}}" name="salesdate">
+                        <div class="modal-header bg-danger">
+                            <h4 class="modal-title text-white" id="danger-header-modalLabel">Delete Sales</h4>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are your Sure ?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                        </div>
+
+                    </div><!-- /.modal-content -->
+                    </form>
+                </div><!-- /.modal-dialog -->
+            </div>
+            {% endfor %}
+
+       
+{% endblock %}
